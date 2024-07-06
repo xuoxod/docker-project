@@ -1,0 +1,113 @@
+Add user to docker group to avoid having to user sudo
+
+    sudo usermod -aG docker <username>
+
+
+Keep docker running
+    sudo docker -it <image name> <program to run e.g. /bin/bash>
+
+
+To exit container
+    Ctrl + v
+    type exit
+
+
+To exit a running container with killing it
+    Ctrl + p and while holding press p
+
+
+List Docker images
+    sudo docker images
+
+
+List Docker processes
+    Examples:
+        List running processes
+            sudo docker ps
+        
+        List all processes
+            sudo docker ps -a
+
+
+Run image with interactive shell
+    Examples:
+        sudo docker run -it ubuntu /bin/bash
+        sudo docker run -it ubuntu
+
+
+Keep image running in the background
+    Examples:
+        sudo docker run -it -d ubuntu /bin/bash
+
+
+How to attach to a container running in the background
+    Examples:
+        sudo docker run -it -d ubuntu /bin/bash
+        Or
+        sudo docker run -it -d ubuntu
+        
+        Then:
+            sudo docker attach <container ID>
+            
+
+How to log into container as non root
+    docker exec -it baeldung bash
+
+
+How to log into container as root user
+    docker exec -u 0 -it mycontainer bash
+    Or
+    docker exec -u root -it mycontainer bash
+
+
+How to map local port to docker image port
+    Examples:
+     sudo docker run -it -d -p 8080:80 nginx
+                               <local port:container port>
+
+    sudo docker run -it -d --restart unless-stopped -p 8080:80 nginx
+
+
+How to stop a running container
+    sudo docker stop <container ID>
+
+
+Create a container
+    Examples:
+        1.
+            sudo docker run -it ubuntu
+            Then copy the container's ID
+            Then run:
+                docker commit <ID> <name:verion number>
+                docker commit 1234567 myserver:1.0
+                Or to change the entry point run
+                    sudo docker commit --change='ENTRYPOINT ["apachectrl","-DFOREGROUND"]' <container ID> <new image name>
+
+        2.
+            Create a docker file: touch Dockerfile
+            While inside the directory where Dockerfile lives
+                sudo docker build -t <name> .
+                sudo docker build --no-cache -t xuoxod/ubuntu:1.0 .
+
+Docker How Tos
+
+Detaching Without Stopping
+
+Docker supports a keyboard combination to gracefully detach from a container. Press Ctrl-P, followed by Ctrl-Q, to detach from your connection.
+
+You'll be dropped back into your shell but the previously attached process will remain alive, keeping your container running. You can check this by using docker ps to get a list of running containers.
+
+Pressing Ctrl-C or running the exit command will usually kill the container's foreground process unless it's been specially configured. A Docker container needs to have a running foreground process; a container without one will enter the stopped state.
+
+Detaching When The Keyboard Sequence Won't Work
+
+Sometimes you might encounter a container process that refuses to detach, even when you issue the keyboard sequence. This can happen if the container's input stream isn't connected to your terminal (-i flag) or it has no pseudo-TTY allocated (-t flag). You could also come across this issue if your container's process handles the detach key sequence and you didn't override it when you attached.
+
+It's still possible to detach your terminal from the container under these circumstances. You need to temporarily open another shell window and use it to kill the docker.attach process that's keeping the attachment active.
+
+First find the process ID of the attachment process:
+
+ps -ef | grep attach
+Use the output from ps to identify the docker.attach process you need to kill. The command in the CMD column should identify the attachment you're looking for. Note down the relevant PID number and use the kill command to kill this process:
+
+kill -9 <PID>

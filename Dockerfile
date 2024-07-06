@@ -8,12 +8,13 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt dist-upgrade -y 
 
 # Install packages
-RUN apt install htop bat net-tools netwox shc -y
+RUN apt install htop bat net-tools netwox shc locate doas -y
 
 # Create default user and setup env
 RUN useradd -m xuaxad -c "default user"
 ADD --chown=xuaxad:xuaxad "./.user-env/*" "/home/xuaxad/"
 USER xuaxad
+# CMD /bin/bash
 WORKDIR /home/xuaxad
 
 # Add user to admin groups
