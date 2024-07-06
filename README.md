@@ -16,7 +16,5 @@ _Development_
 
   - Visual Studio Code v1.91.0
 
-- Language
-
-  - Docker v24.0.7
+- Docker v24.0.7
 ```
