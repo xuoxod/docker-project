@@ -20,11 +20,6 @@ USER xuaxad
 # CMD /bin/bash
 WORKDIR /home/xuaxad
 
-# Add user to admin groups
-# RUN sudo usermod -aG sudo xuaxad
-# RUN sudo usermod -aG adm xuaxad
-# RUN sudo usermod -aG dip xuaxad
-
 # Create a development dir structure
 RUN cd /home/xuaxad && \
     mkdir -p private/projects/desktop private/projects/web \
