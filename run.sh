@@ -97,7 +97,7 @@ checkPaths() {
             sleep $PAUSE_SECONDS
         fi
 
-        if ! [[ -w "$USER_SRC" ]]; then
+        if [[ -w "$USER_SRC" ]]; then
             printf "Directory $USER_SRC Is Writable\n\n"
             sleep $PAUSE_SECONDS
         else
