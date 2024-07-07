@@ -57,7 +57,7 @@ checkPaths() {
         printf "Listing newly created $(pwd)/private directory\n\n"
         ls "$(pwd)/private"
         sleep $PAUSE_SECONDS
-        printf "\n\nListing all content in the $(pwd) directory\n\n"
+        printf "\n\nListing all content in the $(pwd)/private directory\n\n"
         sleep $PAUSE_SECONDS
         ls -lah "$(pwd)/private"
         sleep $DELAY_SECONDS
