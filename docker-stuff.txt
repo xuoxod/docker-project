@@ -71,6 +71,10 @@ How to map local port to docker image port
 How to stop a running container
     sudo docker stop <container ID>
 
+How to mount a file or directory from container to the host
+    Examples:
+     docker run -it -d --name xbuntu -v ./.user-helpers:/home/xuaxad/bin xuoxod/ubuntu:1.1
+
 
 Create a container
     Examples:
