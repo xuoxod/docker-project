@@ -80,6 +80,7 @@ createPaths() {
 
 checkPaths() {
     printf "Checking for the necessary '$USER_SRC' directory\n\n"
+    sleep $DELAY_SECONDS
 
     if [[ -e "$USER_SRC" ]]; then
         printf "Path '$USER_SRC' Does Not Exist .... Creating The Necessary Paths ...\n\n"
@@ -87,7 +88,7 @@ checkPaths() {
 
         createPaths
     else
-        printf "Directory '$path' Exists ... So We're Good To Go!!!\n\n"
+        printf "Directory '$USER_SRC' Exists ... So We're Good To Go!!!\n\n"
     fi
 
 }
