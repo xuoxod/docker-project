@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 <<COMMENT
     Docker helper script
+    Stops running container
+    Removes stopped container
 COMMENT
 declare -r EXIT_PROG=0
 declare -r ROOT_UID=0
@@ -27,7 +29,7 @@ DELAY_SECONDS=2
 DOCKER_CMD="docker $VERB $NOUN "
 
 clearVars() {
-    unset @
+    unset VERB NOUN
 }
 
 gracefulExit() {
@@ -149,4 +151,4 @@ done
 shift "$(($OPTIND - 1))"
 
 printf "\n\n\t\t  Docker Command Final Statement\n\n\t$DOCKER_CMD\n\n"
-# $DOCKER_CMD
+$DOCKER_CMD

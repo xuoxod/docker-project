@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 <<COMMENT
     Docker helper script
+    Run an image
 COMMENT
 declare -r EXIT_PROG=0
 declare -r ROOT_UID=0
@@ -22,6 +23,7 @@ IMAGE_NAME="xbuntu"
 IMAGE_VER="1.0"
 USER_HOME="$HOME"
 USER_SRC="$HOME/private/.data"
+VOLUME="$USER_SRC"
 HOST_SRC="USER_SRC"
 ClIENT_DST="$USER_HOME/private/.data"
 ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$ClIENT_DST $IMAGE_URL:$IMAGE_VER"
@@ -35,7 +37,7 @@ STATUS_MSG="Checking for the necessary '$USER_SRC' directory\n\n"
 PATH_STATUS=1
 
 NAME="myimage"
-DOCKER_CMD="docker run -it -d --name $NAME "
+DOCKER_CMD="docker ps"
 
 clearVars() {
     unset @
@@ -150,15 +152,15 @@ while getopts ':?u:n:v:s:t' OPTION; do
         # if [[ $# -eq 2 ]]; then
         optInd="$OPTIND"
         optArg="$OPTARG"
-        url="${OPTARG}"
+        IMAGE_URL="${OPTARG}"
         printf "Argument Count: $#\n"
         printf "Option Index: $optInd\n"
         printf "Option Argument: $optArg\n"
-        printf "Image URL: ${url}\n\n"
+        printf "Image URL: ${IMAGE_URL}\n\n"
         # else
         #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
         # fi
-        DOCKER_CMD="$DOCKER_CMD$url "
+        DOCKER_CMD="docker run -it -d --name $NAME $IMAGE_URL "
         ;;
 
     n)
@@ -173,22 +175,22 @@ while getopts ':?u:n:v:s:t' OPTION; do
         # else
         #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
         # fi
-        DOCKER_CMD="$DOCKER_CMD --name=$NAME "
+        DOCKER_CMD="docker run -it -d --name $NAME $IMAGE_URL "
         ;;
 
     v)
         # if [[ $# -eq 2 ]]; then
         optInd="$OPTIND"
         optArg="$OPTARG"
-        src_path="${OPTARG}"
+        VOLUME="${OPTARG}"
         printf "Argument Count: $#\n"
         printf "Option Index: $optInd\n"
         printf "Option Argument: $optArg\n"
-        printf "Volume Paths: $src_path\n\n"
+        printf "Volume Paths: $VOLUME\n\n"
         # else
         #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Host's Data File Or Directory\n\n"
         # fi
-        DOCKER_CMD="$DOCKER_CMD-v $src_path "
+        DOCKER_CMD="docker run -it -d --name $NAME -v $VOLUME $IMAGE_URL"
         ;;
 
     ?)
