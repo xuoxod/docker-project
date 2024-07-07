@@ -78,8 +78,6 @@ createPaths() {
 
     STATUS_MSG="Re-Checking for the necessary '$USER_SRC' directory\n\n"
     checkPathReadAndWrite
-    printf "\n\n\t\t Good Bye!!\n\n"
-    sleep $DELAY_SECONDS
     # exit 0
     # fi
 
@@ -91,11 +89,13 @@ checkPathExist() {
 
     if ! [[ -e "$USER_SRC" ]]; then
         createPath
+    else
+        STATUS_MSG="Path $USER_SRC Exists\n\n"
     fi
 }
 
 checkPathReadAndWrite() {
-    printf "Checking Directory '$USER_SRC' Read and Write Ability\n\n"
+    printf "$STATUS_MSG"
 
     if [[ -r "$USER_SRC" ]]; then
         printf "Directory $USER_SRC Is Readable\n\n"
