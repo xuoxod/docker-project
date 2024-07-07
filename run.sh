@@ -43,7 +43,7 @@ exitProg() {
     gracefulExit
 }
 
-checkPaths() {
+createPaths() {
     if ! [[ -e "$USER/private" ]]; then
         cd ~
         pwd
@@ -67,6 +67,20 @@ checkPaths() {
 
 }
 
+checkPaths() {
+    printf "Checking for the necessary '$(~)/private/.data' director\n\n"
+
+    if ! [[ -e "$(~)/private/.data" ]]; then
+        printf "Path '$(~)/private/.data' does Not exists, so will create it\n\n"
+
+        createPaths
+
+    else
+        printf "Directory '$(~)/private/.data' Exists ... So We're Good To Go!!!\n\n"
+    fi
+
+}
+
 initProg() {
     checkPaths
 }
@@ -76,7 +90,6 @@ trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 while getopts ':hs:' OPTION; do
     case "${OPTION}" in
     *)
-        printf "$ARG\n\n"
         initProg
         ;;
 
