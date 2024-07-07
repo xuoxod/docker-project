@@ -27,6 +27,7 @@ ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$CONT_DST $IMAGE_URL:$IMA
 DIRS="cd ~; cd private; mkdir .data .data/scripts/bash .data/images/jpgs .data/images/pngs .data/images/gifs .data/images/tiffs .data/images/svgs .data/texts/information .data/texts/reference .data/texts/files .data/texts/files/pdfs .data/texts/files/txts -p"
 
 PAUSE_SECONDS=4
+MSG_SECONDS=6
 DELAY_SECONDS=2
 
 clearVars() {
@@ -50,13 +51,15 @@ checkPaths() {
         printf "Creating the necessary directory child in parent $(pwd)\n\n"
         sleep $PAUSE_SECONDS
         # mkdir private
+        printf "Directory '$(pwd)/private' Creation Success!\n\n"
+        sleep $MSG_SECONDS
         clear
-        printf "Listing newly created $(pwd)'private' directory\n\n"
+        printf "Listing newly created $(pwd)/private directory\n\n"
+        ls "$(pwd)/private"
         sleep $PAUSE_SECONDS
-        ls
+        printf "\n\nListing all content in the $(pwd) directory\n\n"
         sleep $PAUSE_SECONDS
-        printf "Listing all content in the $(pwd) directory\n\n"
-        ls -lah
+        ls -lah "$(pwd)/private"
         sleep $DELAY_SECONDS
         exit 0
     fi
