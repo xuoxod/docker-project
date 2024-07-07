@@ -32,7 +32,7 @@ MSG_SECONDS=6
 DELAY_SECONDS=2
 
 clearVars() {
-    unset ARG
+    unset @
 }
 
 gracefulExit() {
@@ -57,13 +57,15 @@ createPaths() {
 
     printf "\n\nCreating the necessary directory child in parent $(pwd)/private\n\n"
     sleep $PAUSE_SECONDS
-    # mkdir private
+    # This variable contains the command text to execute in the console
+    # $(DIRS)
 
     printf "Directory '$(pwd)/private/.data' Creation Success!\n\n"
     sleep $MSG_SECONDS
     # clear
 
     printf "Listing content in the newly created directory: $(pwd)/private/.data\n\n"
+
     ls "$USER_SRC"
     sleep $PAUSE_SECONDS
 
@@ -73,7 +75,7 @@ createPaths() {
 
     printf "\n\n\t\t Good Bye!!\n\n"
     sleep $DELAY_SECONDS
-    exit 0
+    # exit 0
     # fi
 
 }
@@ -82,15 +84,28 @@ checkPaths() {
     printf "Checking for the necessary '$USER_SRC' directory\n\n"
     sleep $DELAY_SECONDS
 
-    if [[ -e "$USER_SRC" ]]; then
-        printf "Path '$USER_SRC' Does Not Exist .... Creating The Necessary Paths ...\n\n"
-        sleep $PAUSE_SECONDS
-
+    if ! [[ -e "$USER_SRC" ]]; then
         createPaths
     else
-        printf "Directory '$USER_SRC' Exists ... So We're Good To Go!!!\n\n"
-    fi
+        printf "Directory '$USER_SRC' Exists ... So Will Check Read and Write Ability\n\n"
 
+        if [[ -r "$USER_SRC" ]]; then
+            printf "Directory $USER_SRC Is Readable\n\n"
+            sleep $PAUSE_SECONDS
+        else
+            printf "Directory $USER_SRC Is NOT Readable\n\n"
+            sleep $PAUSE_SECONDS
+        fi
+
+        if ! [[ -w "$USER_SRC" ]]; then
+            printf "Directory $USER_SRC Is Writable\n\n"
+            sleep $PAUSE_SECONDS
+        else
+            printf "Directory $USER_SRC Is NOT Writable\n\n"
+            sleep $PAUSE_SECONDS
+        fi
+    fi
+    gracefulExit
 }
 
 initProg() {
