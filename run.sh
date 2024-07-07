@@ -46,8 +46,14 @@ exitProg() {
 createPaths() {
     if ! [[ -e "$USER/private" ]]; then
         cd ~
+        printf "Just arrived in the $USER/$HOME directory\n\n"
+        sleep $PAUSE_SECONDS
+
+        printf "Here ... I'll Prove It ...\n\n"
+        sleep $PAUSE_SECONDS
         pwd
         sleep $PAUSE_SECONDS
+
         printf "Creating the necessary directory child in parent $(pwd)\n\n"
         sleep $PAUSE_SECONDS
         # mkdir private
@@ -68,15 +74,17 @@ createPaths() {
 }
 
 checkPaths() {
-    printf "Checking for the necessary '$(~)/private/.data' director\n\n"
+    path="$HOME/private/.data"
 
-    if ! [[ -e "$(~)/private/.data" ]]; then
-        printf "Path '$(~)/private/.data' does Not exists, so will create it\n\n"
+    printf "Checking for the necessary '$path' directory\n\n"
+
+    if ! [[ -e "$path" ]]; then
+        printf "Path '$path' Does Not Exist .... Creating The Necessary Paths ...\n\n"
+        sleep $PAUSE_SECONDS
 
         createPaths
-
     else
-        printf "Directory '$(~)/private/.data' Exists ... So We're Good To Go!!!\n\n"
+        printf "Directory '$path' Exists ... So We're Good To Go!!!\n\n"
     fi
 
 }
