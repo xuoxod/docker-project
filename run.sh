@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 <<COMMENT
-    Administrative helper script use for:
-        - Adding user to sudo group
-        - Adding user to given group
-        - Removing user from sudo group
-        - Listing user's group(s)
-        - Locking user account
-        - Unlocking user account
+    Docker helper script
 COMMENT
-declare -r PATH_TEMPLATE='^((/)?([a-zA-Z]+)(/[a-zA-Z]+/?)?$|/)'
 declare -r EXIT_PROG=0
 declare -r ROOT_UID=0
 declare -r NON_ROOT=121
