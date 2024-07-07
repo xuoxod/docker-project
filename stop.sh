@@ -17,25 +17,14 @@ set -m
 # set -x Prints command to the console
 source patterns.sh
 
-IMAGE_URL="xuoxod/ubuntu"
-IMAGE_NAME="xbuntu"
-IMAGE_VER="1.0"
-USER_HOME="$HOME"
-USER_SRC="$HOME/private/.data"
-HOST_SRC="USER_SRC"
-ClIENT_DST="$USER_HOME/private/.data"
-ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$ClIENT_DST $IMAGE_URL:$IMAGE_VER"
-DIRS="cd ~; cd private; mkdir .data .data/scripts/bash .data/images/jpgs .data/images/pngs .data/images/gifs .data/images/tiffs .data/images/svgs .data/texts/information .data/texts/reference .data/texts/files .data/texts/files/pdfs .data/texts/files/txts -p"
-DUMMY="cd ~; cd private; ls -halR ./.data"
+VERB="rm"
+NOUN="imagename"
 
 PAUSE_SECONDS=4
 MSG_SECONDS=6
 DELAY_SECONDS=2
-STATUS_MSG="Checking for the necessary '$USER_SRC' directory\n\n"
-PATH_STATUS=1
 
-NAME="myimage"
-DOCKER_CMD="docker run -it -d --name $NAME "
+DOCKER_CMD="docker $VERB $NOUN "
 
 clearVars() {
     unset @
@@ -137,58 +126,19 @@ initProg() {
 
 trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 
-while getopts ':?u:n:v:s:t' OPTION; do
+while getopts ':?r:s:' OPTION; do
     case "${OPTION}" in
-    t)
-        printf "Argument Count: $#\n"
-        printf "Option: ${OPTION}\n"
-        printf "Option Index: ${OPTIND}\n\n"
-        initProg
+    r)
+        # Docker remove container
+        VERB="rm"
+        NOUN="${OPTARG}"
+        DOCKER_CMD="docker $VERB $NOUN"
         ;;
-
-    u)
-        # if [[ $# -eq 2 ]]; then
-        optInd="$OPTIND"
-        optArg="$OPTARG"
-        url="${OPTARG}"
-        printf "Argument Count: $#\n"
-        printf "Option Index: $optInd\n"
-        printf "Option Argument: $optArg\n"
-        printf "Image URL: ${url}\n\n"
-        # else
-        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
-        # fi
-        DOCKER_CMD="$DOCKER_CMD$url "
-        ;;
-
-    n)
-        # if [[ $# -eq 2 ]]; then
-        optInd="$OPTIND"
-        optArg="$OPTARG"
-        NAME="${OPTARG}"
-        printf "Argument Count: $#\n"
-        printf "Option Index: $optInd\n"
-        printf "Option Argument: $optArg\n"
-        printf "Container Run-Time Name: ${NAME}\n\n"
-        # else
-        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
-        # fi
-        DOCKER_CMD="$DOCKER_CMD --name=$NAME "
-        ;;
-
-    v)
-        # if [[ $# -eq 2 ]]; then
-        optInd="$OPTIND"
-        optArg="$OPTARG"
-        src_path="${OPTARG}"
-        printf "Argument Count: $#\n"
-        printf "Option Index: $optInd\n"
-        printf "Option Argument: $optArg\n"
-        printf "Volume Paths: $src_path\n\n"
-        # else
-        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Host's Data File Or Directory\n\n"
-        # fi
-        DOCKER_CMD="$DOCKER_CMD-v $src_path "
+    s)
+        # Docker remove container
+        VERB="stop"
+        NOUN="${OPTARG}"
+        DOCKER_CMD="docker $VERB $NOUN"
         ;;
 
     ?)
@@ -198,5 +148,5 @@ while getopts ':?u:n:v:s:t' OPTION; do
 done
 shift "$(($OPTIND - 1))"
 
-printf "\n\n\t\t Docker Command Final Statement\n$DOCKER_CMD\n\n"
-$DOCKER_CMD
+printf "\n\n\t\t  Docker Command Final Statement\n\n\t$DOCKER_CMD\n\n"
+# $DOCKER_CMD
