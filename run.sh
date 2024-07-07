@@ -26,10 +26,12 @@ HOST_SRC="USER_SRC"
 ClIENT_DST="$USER_HOME/private/.data"
 ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$ClIENT_DST $IMAGE_URL:$IMAGE_VER"
 DIRS="cd ~; cd private; mkdir .data .data/scripts/bash .data/images/jpgs .data/images/pngs .data/images/gifs .data/images/tiffs .data/images/svgs .data/texts/information .data/texts/reference .data/texts/files .data/texts/files/pdfs .data/texts/files/txts -p"
+DUMMY="cd ~; cd private; ls -halR ./.data"
 
 PAUSE_SECONDS=4
 MSG_SECONDS=6
 DELAY_SECONDS=2
+STATUS_MSG="Checking for the necessary '$USER_SRC' directory\n\n"
 
 clearVars() {
     unset @
@@ -59,6 +61,7 @@ createPaths() {
     sleep $PAUSE_SECONDS
     # This variable contains the command text to execute in the console
     # $(DIRS)
+    echo $DIRS
 
     printf "Directory '$(pwd)/private/.data' Creation Success!\n\n"
     sleep $MSG_SECONDS
@@ -73,6 +76,8 @@ createPaths() {
     ls -lah "$USER_SRC"
     sleep $PAUSE_SECONDS
 
+    STATUS_MSG="Re-Checking for the necessary '$USER_SRC' directory\n\n"
+    checkPathReadAndWrite
     printf "\n\n\t\t Good Bye!!\n\n"
     sleep $DELAY_SECONDS
     # exit 0
@@ -80,36 +85,39 @@ createPaths() {
 
 }
 
-checkPaths() {
-    printf "Checking for the necessary '$USER_SRC' directory\n\n"
+checkPathExist() {
+    printf "$STATUS_MSG"
     sleep $DELAY_SECONDS
 
     if ! [[ -e "$USER_SRC" ]]; then
-        createPaths
-    else
-        printf "Directory '$USER_SRC' Exists ... So Will Check Read and Write Ability\n\n"
-
-        if [[ -r "$USER_SRC" ]]; then
-            printf "Directory $USER_SRC Is Readable\n\n"
-            sleep $PAUSE_SECONDS
-        else
-            printf "Directory $USER_SRC Is NOT Readable\n\n"
-            sleep $PAUSE_SECONDS
-        fi
-
-        if [[ -w "$USER_SRC" ]]; then
-            printf "Directory $USER_SRC Is Writable\n\n"
-            sleep $PAUSE_SECONDS
-        else
-            printf "Directory $USER_SRC Is NOT Writable\n\n"
-            sleep $PAUSE_SECONDS
-        fi
+        createPath
     fi
-    gracefulExit
+}
+
+checkPathReadAndWrite() {
+    printf "Checking Directory '$USER_SRC' Read and Write Ability\n\n"
+
+    if [[ -r "$USER_SRC" ]]; then
+        printf "Directory $USER_SRC Is Readable\n\n"
+        sleep $PAUSE_SECONDS
+    else
+        printf "Directory $USER_SRC Is NOT Readable\n\n"
+        sleep $PAUSE_SECONDS
+    fi
+
+    if [[ -w "$USER_SRC" ]]; then
+        printf "Directory $USER_SRC Is Writable\n\n"
+        sleep $PAUSE_SECONDS
+    else
+        printf "Directory $USER_SRC Is NOT Writable\n\n"
+        sleep $PAUSE_SECONDS
+    fi
 }
 
 initProg() {
-    checkPaths
+    checkPathExist
+    checkPathReadAndWrite
+    gracefulExit
 }
 
 trap "gracefulExit" INT TERM QUIT PWR STOP KILL
