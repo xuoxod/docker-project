@@ -61,6 +61,7 @@ checkPaths() {
         sleep $PAUSE_SECONDS
         ls -lah "$(pwd)/private"
         sleep $DELAY_SECONDS
+        printf "\n\n\t\t Good Bye!!\n\n"
         exit 0
     fi
 
