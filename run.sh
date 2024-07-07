@@ -33,6 +33,8 @@ MSG_SECONDS=6
 DELAY_SECONDS=2
 STATUS_MSG="Checking for the necessary '$USER_SRC' directory\n\n"
 
+DOCKER_CMD="docker run -it -d "
+
 clearVars() {
     unset @
 }
@@ -40,6 +42,10 @@ clearVars() {
 gracefulExit() {
     clearVars
     exit "$EXIT_PROG"
+}
+
+noOptionErr() {
+    printf "\n"
 }
 
 exitProg() {
@@ -122,10 +128,56 @@ initProg() {
 
 trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 
-while getopts ':hs:' OPTION; do
+while getopts ':?u:n:v:s:t' OPTION; do
     case "${OPTION}" in
-    *)
+    t)
+        printf "Argument Count: $#\n"
         initProg
+        ;;
+
+    u)
+        # if [[ $# -eq 2 ]]; then
+        optInd="$OPTIND"
+        optArg="$OPTARG"
+        url="${OPTARG}"
+        printf "Argument Count: $#\n"
+        printf "Option Index: $optInd\n"
+        printf "Option Argument: $optArg\n"
+        printf "Image URL: ${url}\n\n"
+        # else
+        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
+        # fi
+        DOCKER_CMD="$DOCKER_CMD$url "
+        ;;
+
+    n)
+        # if [[ $# -eq 2 ]]; then
+        optInd="$OPTIND"
+        optArg="$OPTARG"
+        name="${OPTARG}"
+        printf "Argument Count: $#\n"
+        printf "Option Index: $optInd\n"
+        printf "Option Argument: $optArg\n"
+        printf "Container Run-Time Name: ${name}\n\n"
+        # else
+        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Image You Want\n\n"
+        # fi
+        DOCKER_CMD="$DOCKER_CMD--name $name "
+        ;;
+
+    v)
+        # if [[ $# -eq 2 ]]; then
+        optInd="$OPTIND"
+        optArg="$OPTARG"
+        src_path="${OPTARG}"
+        printf "Argument Count: $#\n"
+        printf "Option Index: $optInd\n"
+        printf "Option Argument: $optArg\n"
+        printf "Volume Paths: src_path\n\n"
+        # else
+        #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Host's Data File Or Directory\n\n"
+        # fi
+        DOCKER_CMD="$DOCKER_CMD-v $src_path "
         ;;
 
     ?)
@@ -134,3 +186,5 @@ while getopts ':hs:' OPTION; do
     esac
 done
 shift "$(($OPTIND - 1))"
+
+printf "\n\n\t\t Docker Command Final Statement\n$DOCKER_CMD\n\n"
