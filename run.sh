@@ -32,6 +32,7 @@ PAUSE_SECONDS=4
 MSG_SECONDS=6
 DELAY_SECONDS=2
 STATUS_MSG="Checking for the necessary '$USER_SRC' directory\n\n"
+PATH_STATUS=1
 
 DOCKER_CMD="docker run -it -d "
 
@@ -83,6 +84,7 @@ createPaths() {
     sleep $PAUSE_SECONDS
 
     STATUS_MSG="Re-Checking for the necessary '$USER_SRC' directory\n\n"
+
     checkPathReadAndWrite
     # exit 0
     # fi
@@ -94,9 +96,10 @@ checkPathExist() {
     sleep $DELAY_SECONDS
 
     if ! [[ -e "$USER_SRC" ]]; then
-        createPath
+        STATUS_MSG="Path $USER_SRC Does NOT Exists\n\n"
+        PATH_STATUS=1
     else
-        STATUS_MSG="Path $USER_SRC Exists\n\n"
+        PATH_STATUS=0
     fi
 }
 
@@ -122,7 +125,12 @@ checkPathReadAndWrite() {
 
 initProg() {
     checkPathExist
-    checkPathReadAndWrite
+
+    if [[ $PATH_STATUS -eq 0 ]]; then
+        checkPathReadAndWrite
+    else
+        createPaths
+    fi
     gracefulExit
 }
 
@@ -132,6 +140,8 @@ while getopts ':?u:n:v:s:t' OPTION; do
     case "${OPTION}" in
     t)
         printf "Argument Count: $#\n"
+        printf "Option: ${OPTION}\n"
+        printf "Option Index: ${OPTIND}\n\n"
         initProg
         ;;
 
@@ -173,7 +183,7 @@ while getopts ':?u:n:v:s:t' OPTION; do
         printf "Argument Count: $#\n"
         printf "Option Index: $optInd\n"
         printf "Option Argument: $optArg\n"
-        printf "Volume Paths: src_path\n\n"
+        printf "Volume Paths: $src_path\n\n"
         # else
         #     printf "\n\tMissing Argument\nFlag ${OPTION} requires Path/URL To The Host's Data File Or Directory\n\n"
         # fi
