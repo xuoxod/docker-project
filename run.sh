@@ -1,77 +1,60 @@
-#!/usr/bin/bash
-set -e
-set -u
-set -o pipefail
+#!/usr/bin/env bash
+<<COMMENT
+    Administrative helper script use for:
+        - Adding user to sudo group
+        - Adding user to given group
+        - Removing user from sudo group
+        - Listing user's group(s)
+        - Locking user account
+        - Unlocking user account
+COMMENT
+declare -r PATH_TEMPLATE='^((/)?([a-zA-Z]+)(/[a-zA-Z]+/?)?$|/)'
+declare -r EXIT_PROG=0
+declare -r ROOT_UID=0
+declare -r NON_ROOT=121
+declare -r EXIT_UNKNOWN_USER=120
+declare -r EXIT_UNKNOWN_GROUP=119
+declare -r PROG="Path Finder"
+declare -r DESC="Administrative helper script use for confirming and/or manipulating paths"
 
-INTDEC_PATTERN="^([0-9]{1,3})(\.[0-9]{1,2})?$"
-PATH_PATTERN="^(\/|\.|(\.\/))?[a-zA-Z-]+$"
+set -e          # Exit if any command has a non-zero exit status
+set -u          # Set variables before using them
+set -o pipefail # Prevent pipeline errors from being masked
+set -m
+# set -x Prints command to the console
+source patterns.sh
+
+IMAGE_NAME="xbuntu"
+IMAGE_VER="1.0"
+USER_DIR="$HOME"
+HOST_PATH="$USER_DIR/private/data"
+CONT_PATH="$USER_DIR/private/data"
+ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_PATH:$CONT_PATH xuoxod/ubuntu:$IMAGE_VER"
 
 clearVars() {
-    unset num
+    unset ARG
 }
 
 gracefulExit() {
     clearVars
-    exit 0
+    exit "$EXIT_PROG"
 }
 
-trap "gracefulExit" INT TERM QUIT PWR
+exitProg() {
+    gracefulExit
+}
 
-# Arguments:
-#     $1 = image version number
-#     $2 = mount path on the host
-#     $3 = mount path in the container
-#     $4 = container name
+trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 
-if [ $# -eq 0 ]; then
-    clear
-    printf "\n\t\tdocker run -it -d xuoxod/ubuntu:1.0 ...\n\n"
+while getopts ':hs:' OPTION; do
+    case "${OPTION}" in
+    *)
+        printf "$ARG\n\n"
+        ;;
 
-    # docker run -it -d xuoxod/ubuntu:1.0
-elif [ $# -eq 1 ]; then
-    clear
-    IMAGE_VERSION="$1"
-    CONTAINER_NAME="xbuntu"
-    pth=""
-
-    if [[ "$IMAGE_VERSION" =~ $INTDEC_PATTERN ]]; then
-        printf "\n\t\tdocker run -it -d --name $CONTAINER_NAME xuoxod/ubuntu:$IMAGE_VERSION ...\n\n"
-
-        # docker run -it -d "xuoxod/ubuntu:$IMAGE_VERSION"
-    else
-        printf "\n\t\tdocker run -it -d xuoxod/ubuntu:1.0 ...\n\n"
-
-        # docker run -it -d xuoxod/ubuntu:1.0
-    fi
-elif [[ $# -eq 2 ]]; then
-    IMAGE_VERSION="$1"
-    HOST_MOUNT_PATH="$2"
-    CONTAINER_NAME="xbuntu"
-
-    printf "\n\t\tdocker run -it -d --name $CONTAINER_NAME -v "$HOST_MOUNT_PATH:/home/xuaxad/private/data/host" xuoxod/ubuntu:$IMAGE_VERSION ...\n\n"
-
-    # docker run it -d --name xbuntu -v "path:/home/xuaxad/private/data/host" xuoxod/ubuntu:$num"
-elif [[ $# -eq 3 ]]; then
-    IMAGE_VERSION="$1"
-    HOST_MOUNT_PATH="$2"
-    CONTAINER_MOUNT_PATH="$3"
-    CONTAINER_NAME="xbuntu"
-
-    printf "\n\t\tdocker run -it -d --name $CONTAINER_NAME -v "$HOST_MOUNT_PATH:$CONTAINER_MOUNT_PATH" xuoxod/ubuntu:$IMAGE_VERSION ...\n\n"
-
-    # docker run it -d --name "$CONTAINER_NAME" -v "path:/home/xuaxad/private/data/host" xuoxod/ubuntu:$IMAGE_VERSION"
-elif [[ $# -eq 4 ]]; then
-    IMAGE_VERSION="$1"
-    HOST_MOUNT_PATH="$2"
-    CONTAINER_MOUNT_PATH="$3"
-    CONTAINER_NAME="$4"
-
-    printf "\n\t\tdocker run -it -d --name $CONTAINER_NAME -v "$HOST_MOUNT_PATH:$CONTAINER_MOUNT_PATH" xuoxod/ubuntu:$IMAGE_VERSION ...\n\n"
-
-    # docker run it -d --name "$CONTAINER_NAME" -v "path:/home/xuaxad/private/data/host" xuoxod/ubuntu:$IMAGE_VERSION"
-else
-    clear
-    printf "\n\t\tdocker run -it -d xuoxod/ubuntu:1.0 ...\n\n"
-    # docker run -it -d xuoxod/ubuntu:1.0
-fi
-gracefulExit
+    ?)
+        noOptionErr
+        ;;
+    esac
+done
+shift "$(($OPTIND - 1))"
