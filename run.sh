@@ -24,12 +24,13 @@ set -m
 # set -x Prints command to the console
 source patterns.sh
 
+IMAGE_PATH="xuoxod/ubuntu"
 IMAGE_NAME="xbuntu"
 IMAGE_VER="1.0"
 USER_DIR="$HOME"
 HOST_PATH="$USER_DIR/private/data"
 CONT_PATH="$USER_DIR/private/data"
-ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_PATH:$CONT_PATH xuoxod/ubuntu:$IMAGE_VER"
+ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_PATH:$CONT_PATH $IMAGE_PATH:$IMAGE_VER"
 
 clearVars() {
     unset ARG
