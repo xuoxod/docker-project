@@ -53,7 +53,7 @@ checkPaths() {
         # mkdir private
         printf "Directory '$(pwd)/private' Creation Success!\n\n"
         sleep $MSG_SECONDS
-        clear
+        # clear
         printf "Listing newly created $(pwd)/private directory\n\n"
         ls "$(pwd)/private"
         sleep $PAUSE_SECONDS
