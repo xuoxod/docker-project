@@ -24,6 +24,10 @@ USER_HOME="$HOME"
 HOST_SRC="$USER_HOME/private/data"
 CONT_DST="$USER_HOME/private/data"
 ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$CONT_DST $IMAGE_URL:$IMAGE_VER"
+DIRS="cd ~; cd private; mkdir .data .data/scripts/bash .data/images/jpgs .data/images/pngs .data/images/gifs .data/images/tiffs .data/images/svgs .data/texts/information .data/texts/reference .data/texts/files .data/texts/files/pdfs .data/texts/files/txts -p"
+
+PAUSE_SECONDS=4
+DELAY_SECONDS=2
 
 clearVars() {
     unset ARG
@@ -38,12 +42,38 @@ exitProg() {
     gracefulExit
 }
 
+checkPaths() {
+    if ! [[ -e "$USER/private" ]]; then
+        cd ~
+        pwd
+        sleep $PAUSE_SECONDS
+        printf "Creating the necessary directory child in parent $(pwd)\n\n"
+        sleep $PAUSE_SECONDS
+        # mkdir private
+        clear
+        printf "Listing newly created $(pwd)'private' directory\n\n"
+        sleep $PAUSE_SECONDS
+        ls
+        sleep $PAUSE_SECONDS
+        printf "Listing all content in the $(pwd) directory\n\n"
+        ls -lah
+        sleep $DELAY_SECONDS
+        exit 0
+    fi
+
+}
+
+initProg() {
+    checkPaths
+}
+
 trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 
 while getopts ':hs:' OPTION; do
     case "${OPTION}" in
     *)
         printf "$ARG\n\n"
+        initProg
         ;;
 
     ?)
