@@ -21,9 +21,10 @@ IMAGE_URL="xuoxod/ubuntu"
 IMAGE_NAME="xbuntu"
 IMAGE_VER="1.0"
 USER_HOME="$HOME"
-HOST_SRC="$USER_HOME/private/data"
-CONT_DST="$USER_HOME/private/data"
-ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$CONT_DST $IMAGE_URL:$IMAGE_VER"
+USER_SRC="$HOME/private/.data"
+HOST_SRC="USER_SRC"
+ClIENT_DST="$USER_HOME/private/.data"
+ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$ClIENT_DST $IMAGE_URL:$IMAGE_VER"
 DIRS="cd ~; cd private; mkdir .data .data/scripts/bash .data/images/jpgs .data/images/pngs .data/images/gifs .data/images/tiffs .data/images/svgs .data/texts/information .data/texts/reference .data/texts/files .data/texts/files/pdfs .data/texts/files/txts -p"
 
 PAUSE_SECONDS=4
@@ -44,42 +45,44 @@ exitProg() {
 }
 
 createPaths() {
-    if ! [[ -e "$USER/private" ]]; then
-        cd ~
-        printf "Just arrived in the $USER/$HOME directory\n\n"
-        sleep $PAUSE_SECONDS
+    # if [[ -e "$USER_SRC" ]]; then
+    cd ~
+    printf "Just arrived in the $HOME directory\n\n"
+    sleep $PAUSE_SECONDS
 
-        printf "Here ... I'll Prove It ...\n\n"
-        sleep $PAUSE_SECONDS
-        pwd
-        sleep $PAUSE_SECONDS
+    printf "Here ... I'll Prove It ...\n\n"
+    sleep $PAUSE_SECONDS
+    pwd
+    sleep $PAUSE_SECONDS
 
-        printf "Creating the necessary directory child in parent $(pwd)\n\n"
-        sleep $PAUSE_SECONDS
-        # mkdir private
-        printf "Directory '$(pwd)/private' Creation Success!\n\n"
-        sleep $MSG_SECONDS
-        # clear
-        printf "Listing newly created $(pwd)/private directory\n\n"
-        ls "$(pwd)/private"
-        sleep $PAUSE_SECONDS
-        printf "\n\nListing all content in the $(pwd)/private directory\n\n"
-        sleep $PAUSE_SECONDS
-        ls -lah "$(pwd)/private"
-        sleep $DELAY_SECONDS
-        printf "\n\n\t\t Good Bye!!\n\n"
-        exit 0
-    fi
+    printf "\n\nCreating the necessary directory child in parent $(pwd)/private\n\n"
+    sleep $PAUSE_SECONDS
+    # mkdir private
+
+    printf "Directory '$(pwd)/private/.data' Creation Success!\n\n"
+    sleep $MSG_SECONDS
+    # clear
+
+    printf "Listing content in the newly created directory: $(pwd)/private/.data\n\n"
+    ls "$USER_SRC"
+    sleep $PAUSE_SECONDS
+
+    printf "\n\nListing detailed content in the $(pwd)/private/.data directory\n\n"
+    ls -lah "$USER_SRC"
+    sleep $PAUSE_SECONDS
+
+    printf "\n\n\t\t Good Bye!!\n\n"
+    sleep $DELAY_SECONDS
+    exit 0
+    # fi
 
 }
 
 checkPaths() {
-    path="$HOME/private/.data"
+    printf "Checking for the necessary '$USER_SRC' directory\n\n"
 
-    printf "Checking for the necessary '$path' directory\n\n"
-
-    if ! [[ -e "$path" ]]; then
-        printf "Path '$path' Does Not Exist .... Creating The Necessary Paths ...\n\n"
+    if [[ -e "$USER_SRC" ]]; then
+        printf "Path '$USER_SRC' Does Not Exist .... Creating The Necessary Paths ...\n\n"
         sleep $PAUSE_SECONDS
 
         createPaths
