@@ -28,9 +28,9 @@ IMAGE_URL="xuoxod/ubuntu"
 IMAGE_NAME="xbuntu"
 IMAGE_VER="1.0"
 USER_DIR="$HOME"
-HOST_PATH="$USER_DIR/private/data"
-CONT_PATH="$USER_DIR/private/data"
-ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_PATH:$CONT_PATH $IMAGE_URL:$IMAGE_VER"
+HOST_SRC="$USER_DIR/private/data"
+CONT_DST="$USER_DIR/private/data"
+ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$CONT_DST $IMAGE_URL:$IMAGE_VER"
 
 clearVars() {
     unset ARG
