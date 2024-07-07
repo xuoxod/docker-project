@@ -27,9 +27,9 @@ source patterns.sh
 IMAGE_URL="xuoxod/ubuntu"
 IMAGE_NAME="xbuntu"
 IMAGE_VER="1.0"
-USER_DIR="$HOME"
-HOST_SRC="$USER_DIR/private/data"
-CONT_DST="$USER_DIR/private/data"
+USER_HOME="$HOME"
+HOST_SRC="$USER_HOME/private/data"
+CONT_DST="$USER_HOME/private/data"
 ARG="docker run -it -d --name $IMAGE_NAME -v $HOST_SRC:$CONT_DST $IMAGE_URL:$IMAGE_VER"
 
 clearVars() {
