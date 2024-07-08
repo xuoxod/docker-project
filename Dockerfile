@@ -1,5 +1,5 @@
 FROM ubuntu
-LABEL com.rmediatech.image.authors="rick@rmediatech.com"
+LABEL com.rmediatech.image.author="rick@rmediatech.com"
 
 # Skip prompts
 ARG DEBIAN_FRONTEND=noninteractive
