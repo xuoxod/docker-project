@@ -20,7 +20,7 @@ MSG_SECONDS=6
 DELAY_SECONDS=2
 
 CACHE="--no-cache"
-IMAGE_TAG="${USER}/$DESKTOP_SESSION"
+IMAGE_TAG="${USERNAME}/${DESKTOP_SESSION}"
 IMAGE_VER="1.0"
 DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER ."
 
@@ -35,6 +35,7 @@ gracefulExit() {
 
 noOptionErr() {
     printf "\n\n"
+
 }
 
 trap "gracefulExit" INT TERM QUIT PWR STOP KILL
@@ -56,7 +57,7 @@ while getopts ':?c:t:v:' OPTION; do
         ;;
 
     t)
-        # Image URL: default ubuntu
+        # Image tAG: default $USERNAME/$DESKTOP_SESSION
         optInd="${OPTIND}"
         option="${OPTION}"
         IMAGE_TAG="${OPTARG}"
@@ -66,7 +67,7 @@ while getopts ':?c:t:v:' OPTION; do
         ;;
 
     v)
-        # Volume: Bind path from host to container
+        # Image Version: default 1.0
         optInd="${OPTIND}"
         option="${OPTION}"
         IMAGE_VER="${OPTARG}"
@@ -86,22 +87,3 @@ printf "\n\n\t\t Docker Command Final Statement\n\n"
 printf "\t $DOCKER_CMD\n\n"
 
 # $DOCKER_CMD
-
-# if [ $# -eq 0 ]; then
-#     clear
-#     printf "\n\t\tdocker build --no-cache -t xuoxod/ubuntu:1.0 . ...\n\n"
-#     docker build --no-cache -t xuoxod/ubuntu:1.0 .
-# elif [ $# -eq 1 ]; then
-#     clear
-#     num="$1"
-#     if [[ "$num" =~ ^([0-9]{1,3})(\.[0-9]{1,2})?$ ]]; then
-#         printf "\n\t\tBdocker build --no-cache -t xuoxod/ubuntu:$num" ...\n\n"
-#         docker build --no-cache -t xuoxod/ubuntu:$num" .
-#     else
-#         printf "\n\t\tdocker build --no-cache -t xuoxod/ubuntu:1.0 . ...\n\n"
-#         docker build --no-cache -t xuoxod/ubuntu:1.0 .
-#     fi
-# else
-#     printf "Not expecting any arguments\n\n"
-# fi
-# gracefulExit
