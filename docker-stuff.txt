@@ -9,7 +9,8 @@ Keep docker running
 
 To exit container
     Ctrl + v
-    type exit
+    Or
+    Type exit
 
 
 To exit a running container with killing it
@@ -20,22 +21,22 @@ List Docker images
     sudo docker images
 
 
-List Docker processes
+List Docker processes: ps
     Examples:
         List running processes
             sudo docker ps
         
-        List all processes
+        List all processes: ps -a
             sudo docker ps -a
 
 
-Run image with interactive shell
+Run image with interactive shell: -it
     Examples:
         sudo docker run -it ubuntu /bin/bash
         sudo docker run -it ubuntu
 
 
-Keep image running in the background
+Keep image running in the background: -d
     Examples:
         sudo docker run -it -d ubuntu /bin/bash
 
@@ -51,7 +52,7 @@ How to attach to a container running in the background
             
 
 How to log into container as non root
-    docker exec -it baeldung bash
+    docker exec -it mycontainer bash
 
 
 How to log into container as root user
@@ -60,7 +61,7 @@ How to log into container as root user
     docker exec -u root -it mycontainer bash
 
 
-How to map local port to docker image port
+How to map local port to docker image port: -p 23:22
     Examples:
      sudo docker run -it -d -p 8080:80 nginx
                                <local port:container port>
