@@ -20,9 +20,10 @@ MSG_SECONDS=6
 DELAY_SECONDS=2
 
 CACHE="--no-cache"
-IMAGE_TAG="${USERNAME}/${DESKTOP_SESSION}"
+IMAGE_TAG="-t ${USERNAME}/${DESKTOP_SESSION}"
 IMAGE_VER="0.1"
-DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER ."
+NETWORK="bridge"
+DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
 
 clearVars() {
     unset CACHE IMAGE_URL IMAGE_VER
@@ -43,16 +44,16 @@ trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 # OPTIONS:
 #    c: control caching
 #    t: image tag name
-#    v: image version
-while getopts ':?c:t:v:' OPTION; do
+#    n: network config
+while getopts ':?c:t:n:v:' OPTION; do
     case "${OPTION}" in
     c)
         # Cache: default --no-cache
         optInd="${OPTIND}"
         option="${OPTION}"
         CACHE="${OPTARG}"
-        DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER ."
-        printf "Option:\t${option}\n"
+        # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+        # printf "Option:\t${option}\n"
         # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
         ;;
 
@@ -61,8 +62,8 @@ while getopts ':?c:t:v:' OPTION; do
         optInd="${OPTIND}"
         option="${OPTION}"
         IMAGE_TAG="${OPTARG}"
-        DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER ."
-        printf "Option:\t${option}\n"
+        # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+        # printf "Option:\t${option}\n"
         # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
         ;;
 
@@ -71,8 +72,18 @@ while getopts ':?c:t:v:' OPTION; do
         optInd="${OPTIND}"
         option="${OPTION}"
         IMAGE_VER="${OPTARG}"
-        DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER ."
-        printf "Option:\t${option}\n"
+        # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+        # printf "Option:\t${option}\n"
+        # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
+        ;;
+
+    n)
+        # Image Version: default 1.0
+        optInd="${OPTIND}"
+        option="${OPTION}"
+        NETWORK="${OPTARG}"
+        # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+        # printf "Option:\t${option}\n"
         # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
         ;;
 
@@ -83,6 +94,7 @@ while getopts ':?c:t:v:' OPTION; do
 done
 shift "$(($OPTIND - 1))"
 
+DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
 printf "\n\n\t\t Docker Command Final Statement\n\n"
 printf "\t $DOCKER_CMD\n\n"
 

@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt dist-upgrade -y 
 
 # Install packages
-RUN apt install htop bat net-tools netwox shc locate doas -y
+RUN apt install htop bat net-tools netwox shc locate tree -y
 
 # Run in host's network environment
 RUN --network=host
@@ -29,4 +29,4 @@ RUN cd /home/xuaxad && \
 ADD --chown=xuaxad:xuaxad "./.user-scripts/*.sh" "/home/xuaxad/private/projects/desktop/bash/proj1/"
 
 # Set entry point
-ENTRYPOINT exec /bin/bash
+ENTRYPOINT ["/bin/bash"]
