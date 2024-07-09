@@ -19,7 +19,7 @@ RUN usermod -aG sudo xuaxad
 
 ADD --chown=xuaxad:xuaxad "./.user-env/*" "/home/xuaxad/"
 USER xuaxad
-# CMD /bin/bash
+CMD /bin/bash
 WORKDIR /home/xuaxad
 
 # Create a development dir structure
