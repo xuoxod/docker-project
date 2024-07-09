@@ -15,6 +15,8 @@ RUN --network=host
 
 # Create default user and setup env
 RUN useradd -m xuaxad -c "default user"
+RUN usermod -aG sudo xuaxad
+
 ADD --chown=xuaxad:xuaxad "./.user-env/*" "/home/xuaxad/"
 USER xuaxad
 # CMD /bin/bash
