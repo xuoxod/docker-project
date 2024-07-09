@@ -98,4 +98,4 @@ DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
 printf "\n\n\t\t Docker Command Final Statement\n\n"
 printf "\t $DOCKER_CMD\n\n"
 
-# $DOCKER_CMD
+$DOCKER_CMD
