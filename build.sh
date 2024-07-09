@@ -44,6 +44,7 @@ trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 # OPTIONS:
 #    c: control caching
 #    t: image tag name
+#    v: image tag version
 #    n: network config
 while getopts ':?c:t:n:v:' OPTION; do
     case "${OPTION}" in
