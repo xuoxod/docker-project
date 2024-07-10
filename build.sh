@@ -22,8 +22,11 @@ DELAY_SECONDS=2
 CACHE="--no-cache"
 IMAGE_TAG="-t ${USERNAME}/${DESKTOP_SESSION}"
 IMAGE_VER="0.1"
-NETWORK="bridge"
-DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+CONTAINER_NAME="${USERNAME}-image"
+NETWORK="default"
+DOCKER_CMD_DEFAULT="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+DOCKER_CMD_CONFIG="docker config ls --format 'table {{.ID}}\t{{.Name}}\t{{.CreatedAt}}' build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+DOCKER_CMD=""
 
 clearVars() {
     unset CACHE IMAGE_URL IMAGE_VER
@@ -44,9 +47,10 @@ trap "gracefulExit" INT TERM QUIT PWR STOP KILL
 # OPTIONS:
 #    c: control caching
 #    t: image tag name
+#    n: container name
 #    v: image tag version
-#    n: network config
-while getopts ':?c:t:n:v:' OPTION; do
+#    N: network config
+while getopts ':?c:t:n:N:v:' OPTION; do
     case "${OPTION}" in
     c)
         # Cache: default --no-cache
@@ -78,11 +82,21 @@ while getopts ':?c:t:n:v:' OPTION; do
         # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
         ;;
 
-    n)
+    N)
         # Image Version: default 1.0
         optInd="${OPTIND}"
         option="${OPTION}"
         NETWORK="${OPTARG}"
+        # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+        # printf "Option:\t${option}\n"
+        # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
+        ;;
+
+    n)
+        # Image Version: default 1.0
+        optInd="${OPTIND}"
+        option="${OPTION}"
+        CONTAINER_NAME="${OPTARG}"
         # DOCKER_CMD="docker build $CACHE -t $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
         # printf "Option:\t${option}\n"
         # printf "docker build $CACHE -t $IMAGE_URL:$IMAGE_VER\n\n"
@@ -95,7 +109,7 @@ while getopts ':?c:t:n:v:' OPTION; do
 done
 shift "$(($OPTIND - 1))"
 
-DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK ."
+DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK --rm --name $CONTAINER_NAME ."
 printf "\n\n\t\t Docker Command Final Statement\n\n"
 printf "\t $DOCKER_CMD\n\n"
 
