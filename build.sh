@@ -109,8 +109,9 @@ while getopts ':?c:t:n:N:v:' OPTION; do
 done
 shift "$(($OPTIND - 1))"
 
-DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK --rm --name $CONTAINER_NAME ."
 printf "\n\n\t\t Docker Command Final Statement\n\n"
 printf "\t $DOCKER_CMD\n\n"
+sleep 3
+DOCKER_CMD="docker build $CACHE $IMAGE_TAG:$IMAGE_VER --network $NETWORK --rm --name $CONTAINER_NAME ."
 
 $DOCKER_CMD
